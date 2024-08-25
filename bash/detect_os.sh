@@ -60,18 +60,25 @@ function detect_distribution_linux(){
 	# import the variables for usage. if this goes wrong lots of
 	# stuff is already bad. 
 	source /etc/os-release
-	DISTRO=${ID}
-	DISTRO_VERSION=${VERSION_ID}
-    elif [[ -f /etc/lsb-release ]]; then
+	DISTRO="${ID}"
+	DISTRO_VERSION="${VERSION_ID}"
+    elif [[ -f /usr/lib/os-release ]]; then
+	# import the variables for usage. if this goes wrong lots of
+	# stuff is already bad.
+	source /usr/lib/lsb-release
+	DISTRO="${ID}"
+	DISTRO_VERSION="${VERSION_ID}"
+    elif [[ -f /etc/lsb-release  ]]; then
 	LSB=$(type -P lsb_release )
 	if [[ $? -ne 0 ]]; then
-	    failure "unable to find lsb_release. manual configuration needed"
+	    DISTRO="unknown_linux"
+	    DISTRO_VERSION="0"
 	fi
-	DISTRO=$( lsb_release -i | awk '{print tolower($NF)}' )
-	DISTRO_VERSION=$( lsb_release -r | awk '{print $NF}' )
+	DISTRO="$( ${LSB} -i | awk '{print tolower($NF)}' )"
+	DISTRO_VERSION="$( ${LSB} -r | awk '{print $NF}' )"
     else
 	DISTRO="unknown_linux"
-	DISTRO_VERSION=0
+	DISTRO_VERSION="0"
     fi
 }
 
@@ -97,7 +104,8 @@ function detect_os(){
 	    detect_distribution_linux
 	    ;;
     	*)
-	    echo "Unable to determine OS"
+	    DISTRO="unknown"
+	    DISTRO_VERSION="0"
 	    ;;
     esac
 
@@ -116,7 +124,7 @@ function main(){
     detect_os
     echo "My Arch is ${ARCH}"
     echo "My Distribution is ${DISTRO}"
-    echo "My Distro Release is ${DISTRO_VERSON}"
+    echo "My Distro Release is ${DISTRO_VERSION}"
 }
 
 main
