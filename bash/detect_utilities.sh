@@ -37,7 +37,7 @@ function failure(){
 function detect_apps(){
     local BAD=0
     for A in ${NEEDED_APPS[*]}; do
-	type -P ${A}
+	type -P ${A} &> /dev/null
 	if [[ $? -ne 0 ]]; then
 	    echo "${A} not found in path. Manual correction may be needed"
 	    BAD=1
