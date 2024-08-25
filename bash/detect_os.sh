@@ -56,11 +56,10 @@ function detect_apps(){
 function detect_distribution_linux(){
     # Determine if we are on a Freedesktop compliant operating system.
     # https://www.freedesktop.org/software/systemd/man/latest/os-release.html
-    test -e /etc/os-release && os_release='/etc/os-release' || os_release='/usr/lib/os-release'
-    if [[ $? -eq 0 ]]; then
+    if [[ -f /etc/os-release ]]; then
 	# import the variables for usage. if this goes wrong lots of
 	# stuff is already bad. 
-	source ${os_release} 
+	source /etc/os-release
 	DISTRO=${ID}
 	DISTRO_VERSION=${VERSION_ID}
     elif [[ -f /etc/lsb-release ]]; then
