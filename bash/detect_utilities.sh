@@ -43,7 +43,9 @@ function detect_apps(){
 	    BAD=1
 	fi
     done
-    failure "Failure to find needed applications. Exiting." "Doing nothing"
+    if [[ ${BAD} -eq 1 ]]; then
+	failure "Failure to find needed applications. Exiting." "Doing nothing"
+    fi
 }
 
 ## Basic Main to put items in and allow for easier search of things.
