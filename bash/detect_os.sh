@@ -88,6 +88,7 @@ function detect_distribution_mac(){
     DISTRO_VERSION=$( uname -r )
 }
 
+# This goes through the OS lists and set that.
 function detect_os(){
     # determine if OSTYPE is properly defined. It should be because we
     # are in bash, but the world is a crazy place.
